@@ -39,42 +39,19 @@ TARGET = "G3"
 
 
 # Download dataset
+from pathlib import Path
+
+DATA_FILE = Path(__file__).parent / "student-mat.csv"
+
 def ensure_dataset():
 
     if DATA_FILE.exists():
         return DATA_FILE
 
-    try:
-
-        with urlopen(DATA_URL, timeout=30) as response:
-            archive_data = response.read()
-
-        with ZipFile(BytesIO(archive_data)) as archive:
-
-            files = [
-                name for name in archive.namelist()
-                if name.lower().endswith("student-mat.csv")
-            ]
-
-            if not files:
-                raise FileNotFoundError(
-                    "Dataset file not found."
-                )
-
-            DATA_FILE.write_bytes(
-                archive.read(files[0])
-            )
-
-    except Exception as e:
-
-        raise RuntimeError(
-            "Dataset download failed. Download "
-            "student-mat.csv manually and put it "
-            "beside app.py. Details: " + str(e)
-        )
-
-    return DATA_FILE
-
+    raise FileNotFoundError(
+        "student-mat.csv is missing. "
+        "Please upload it beside app.py."
+    )
 
 # Load dataset
 def load_dataset():
